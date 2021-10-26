@@ -1,0 +1,83 @@
+{% extends 'members_base.html' %}
+
+{% block files_link_class %}active{% endblock %}
+
+{% block content %}
+
+<section class="members-section">
+
+    <h1>Eine neue Datei hochladen..</h1>
+    <hr>
+    <br/>
+
+    {% if file_name_exists %}
+    <div class="row">
+        <div class="alert alert-danger" role="alert">
+        Eine Datei mit dem Namen und Typ wurden bereits hochgeladen!
+        </div>
+    </div>
+    {% elif server_error %}
+    <div class="row">
+        <div class="alert alert-danger" role="alert">
+        Es gab ein Problem mit der Datei!
+        </div>
+    </div>
+    {% endif %}
+
+    {% comment "only for debuging" %}
+    {% if errors %}
+    {{ errors }}
+    <br/>
+    <br/>
+    {% endif %}
+    {% endcomment %}
+
+
+    <form enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+
+        {% if form.errors %}
+            <div class="alert alert-danger" role="alert">
+                <h5>Folgende Felder sind nicht korrekt ausgefüllt:</h5>
+                <ol>
+                    {% for error in form.errors %}
+                        <li><strong>{{ error|escape }}</strong></li>
+                    {% endfor %}
+                </ol>
+            </div>
+        {% endif %}
+
+        <div class="form-group">
+            <div class="fieldWrapper">
+                <label class="form-label" 
+                        for="{{ form.upload_file.id_for_label }}">Datei:</label>
+
+                {{ form.upload_file }}
+                <div class="valid-feedback">
+                    {% if not form.upload_file.errors %}
+                    Sieht gut aus!
+                    {% endif %}
+                </div>
+                <div id="titleValidationFeedback" class="invalid-feedback">
+                    {{ form.upload_file.errors.0|escape }}
+                </div>
+            </div>
+        </div>
+        <br/>
+        
+        <br/>
+        <button type="submit" class="btn btn-primary">Speichern</button>
+        <a class="btn btn-secondary ms-3" href="{% url 'members-files' %}">Zurück</a>
+        <br/>
+        <br/>
+        <br/>
+    </form>
+
+    </div>
+    <br/>
+    <br/>
+    <br/>
+
+    </section>
+
+{% endblock %}

@@ -1,0 +1,5 @@
+- model: wiki.ClassCategory
+  pk: 1
+  fields:
+      title: Geographie
+      target_class: 1

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head lang="de">
+    <!-- Meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+
+    <title>Wikipeter 2 - Login</title>
+</head>
+<body>
+
+    <div class="container d-flex justify-content-center">
+        <br/>
+        <br/>
+        <br/>
+
+        {% if form.errors %}
+        <div class="shadow p-3 mb-5 bg-body rounded alert alert-danger" role="alert">
+            <p>Ihr Benutzername und Ihr Passwort stimmen nicht überein. Bitte versuchen Sie es erneut.</p>
+        </div>
+        {% endif %}
+
+        {% if next %}
+            {% if user.is_authenticated %}
+            <p>Your account doesn't have access to this page. To proceed,
+            please login with an account that has access.</p>
+            {% else %}
+            <p>Please login to see this page.</p>
+            {% endif %}
+        {% endif %}
+
+        <div class="shadow p-3 mb-5 bg-body rounded" style="max-width: 40rem;">
+            <form class="text-center" method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+
+                {% load static %}
+                <img class="mb-4" src="{% static 'img/Wikipeter2-neon.png' %}" alt="" width="500" height="auto">
+                <h1 class="h3 mb-3 fw-normal">Bitte melde dich an</h1>
+
+                <div class="form-group">
+                    <div class="form-floating mb-3">
+                        {{ form.username }}
+                        <label for="{{ form.username.id_for_label }}">Benutzername</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        {{ form.password }}
+                        <label for="{{ form.password.id_for_label }}">Passwort</label>
+                    </div>
+                    {% comment "" %}
+                    <div class="checkbox mb-3">
+                        <label>
+                            <input type="checkbox" value="remember-me"> Angemeldet bleiben
+                        </label>
+                    </div>{% endcomment %}
+                    
+                    <button class="w-100 btn btn-lg btn-primary" type="submit">Anmelden</button>
+                    <input type="hidden" name="next" value="{{ next }}">
+                    <p class="mt-5 mb-3 text-muted">© 2021</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

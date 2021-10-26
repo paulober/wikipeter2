@@ -1,0 +1,64 @@
+{% extends 'members_base.html' %}
+
+{% block categories_link_class %}active{% endblock %}
+
+{% block content %}
+
+<section>
+
+<h1>Neue Kategorie erstellen..</h1>
+<hr>
+<br/>
+
+<div class="container">
+
+<form method="POST">
+    {% csrf_token %}
+
+    <div class="form-group">
+        {% if form.non_field_errors  %}
+            <div class="alert alert-danger" role="alert">
+                <h5>Folgende Fehler sind Aufgetreten:</h5>
+                <ol>
+                    {% for error in form.non_field_errors %}
+                        <li><strong>{{ error|escape }}</strong></li>
+                    {% endfor %}
+                </ol>
+            </div>
+        {% endif %}
+
+        <div class="fieldWrapper mt-2">
+            <label class="form-label" 
+                    for="{{ form.title.id_for_label }}">Titel:</label>
+            {{ form.title }}
+        </div>
+
+        <div class="fieldWrapper mt-4">
+            <label class="form-label" 
+                    for="{{ form.target_class.id_for_label }}">Klasse:</label>
+            {{ form.target_class }}
+        </div>
+
+        {% comment "" %}
+        <div class="fieldWrapper mt-2">
+            <label class="form-label" 
+                    for="{{ form.category.id_for_label }}">Kategorie (entweder Hauptkategorie oder eine normale):</label>
+            {{ form.category }}
+        </div>{% endcomment %}
+    </div>
+    
+    <br/>
+    <button type="submit" class="btn btn-primary">Erstellen</button><a class="btn btn-secondary ms-3" href="{% url 'members-categories' %}">Zurück</a>
+    <br/>
+    <br/>
+    <br/>
+</form>
+
+</div>
+<br/>
+<br/>
+<br/>
+
+</section>
+
+{% endblock %}

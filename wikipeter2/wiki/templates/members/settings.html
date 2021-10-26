@@ -1,0 +1,53 @@
+{% extends 'members_base.html' %}
+
+{% block content %}
+
+<section class="members-section">
+
+<h1 class="d-flex justify-content-between">Einstellungen:</h1>
+<hr>
+
+{% if save_succeed %}
+    <br/>
+    <div class="alert alert-success" role="alert">
+        Ihre Einstellungen wurden erfolgreich gespeichert!
+    </div>
+{% endif %}
+<br/>
+
+<div class="overflow-auto">
+
+<div class="alert alert-info" role="alert">
+  Info: Der Inhalt von Beiträgen oder speziellen Seiten kann übrigens mit Markdown oder HTML5 modeliert werden.
+</div>
+<br/>
+
+<h3 class="d-flex justify-content-between">Startseite bearbeiten: <a class="btn btn-secondary" href="{% url 'members-settings-edit-special-sites' pk='home' %}">Bearbeiten</a></h3>
+
+<br/>
+<br/>
+<br/>
+<hr>
+<div class="shadow shadow p-2 mb-3 bg-body rounded">
+    <h3>Kommende Features:</h3>
+    <ul>
+        <li>
+            Verwaltung von Nutzern in den Einstellungen.
+        </li>
+        <li>
+            Filter für die Listen im Admin Interface (z.B. Beiträge).
+        </li>
+        <li>
+            Erweiterte Einstellungen für Kategorien, und andere Elemente, wie z.B. die Sichtbarkeit einer Kategorie.
+        </li>
+    </ul>
+</div>
+</div>
+<br/>
+<br/>
+
+
+
+</section>
+
+{% endblock %}

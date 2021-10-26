@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if object_list and object_list|length > 0 %}
+
+<div class="container-fluid">
+
+{% load static %}
+{% for category in object_list  %}
+    <div class="card h-100" style="width: 15rem; display: inline-block; margin: 1rem;">
+        <img src="{% static 'img/Kategorie.svg' %}" class="card-img-top" style="height: 12rem;" alt="...">
+        <div class="card-body">
+            <p class="card-title">{{ category.title }}</p>
+            <a href="{% url 'category-detail' category.id %}" class="btn btn-primary">Öffnen</a>
+        </div>
+    </div>
+{% endfor %}
+</div>
+
+{% else %}
+
+<div class="alert alert-warning" role="alert">
+    Hier befinden sich noch keine Kategorien, schau doch später nochmal hier vorbei.
+</div>
+
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'members_base.html' %}
+
+{% block posts_link_class %}active{% endblock %}
+
+{% block content %}
+
+<section class="members-section">
+
+<h1>Beitrag Aktualisieren...</h1>
+<br/>
+<hr>
+<br/>
+
+<form method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+        {{ form.as_p }}
+    </div>
+
+    <button class="btn btn-primary" type="submit">Aktualisieren</button>
+    <a href="{% url 'members-delete-post' post_pk %}" class="btn btn-danger ms-2">Löschen</a>
+    <a class="btn btn-secondary ms-2" href="{% url 'members-posts' %}">Zurück</a>
+</form>
+<br/>
+
+</section>
+
+{% endblock %}

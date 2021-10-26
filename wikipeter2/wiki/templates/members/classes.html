@@ -1,0 +1,94 @@
+{% extends 'members_base.html' %}
+
+{% block classes_link_class %}active{% endblock %}
+
+{% block content %}
+
+<section class="members-section">
+
+    {% if object_list and object_list|length > 0 %}
+    <div id="deleteClassModal" class="modal fade" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="deleteClassModalTitle" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="deleteClassModalTitle" class="modal-title">Klasse löschen</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {# TODO: show the option to convert all old categories to a new class #}
+                    <p>Möchten Sie die Klasse wirklich löschen? Wenn Sie diese Klasse Löschen, werden alle Kategorien in dieser Klasse ebenfalls gelöscht! Die Beiträge in den Kategorien bleiben allerdings erhalten.</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="dismissBtn" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+                    <button id="deleteClassSubmittBtn" type="button" class="btn btn-danger" data-bs-dismiss="modal">Ja, Klasse löschen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <h1 class="d-flex justify-content-between">Alle Klassen: <div><a class="btn btn-primary" href="{% url 'members-add-class' %}">Neue Klasse erstellen</a></div></h1>
+    <hr>
+    <br/>
+
+    {% if not object_list or object_list|length == 0 %}
+        <div class="alert alert-warning" role="alert">
+            Hier befinden sich noch keine Klassen, erstelle doch gleich eine neue.
+        </div>
+    {% else %}
+        {% if creation_succeed %}
+            <div class="alert alert-success" role="alert">
+                Klasse erfolgreich erstellt!
+            </div>
+            <br/>
+        {% endif %}
+
+        <div class="list-group overflow-auto">
+            {% for class in object_list %}
+                
+                <li id="class-item-{{ class.pk }}" class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 mt-1 me-auto">
+                        <span class="fw-bold" style="font-size: 1.3rem;">{{ class.name }}</span>
+                    </div>
+
+                    <a class="btn btn-primary m-1" href="{% url 'class-detail' class_id=class.pk %}">Öffnen</a>
+                    <a class="btn btn-secondary m-1" href="{% url 'members-edit-class' pk=class.pk %}">Bearbeiten</a>
+                    <button type="button" class="btn btn-danger m-1" data-bs-toggle="modal" data-bs-target="#deleteClassModal" data-bs-whatever="{{ class.pk }}">Löschen</button>
+                </li>
+            {% endfor %}
+        </div>
+        <br/>
+        <br/>
+
+    {% endif %}
+
+    <script>
+        var deleteClassModal = document.getElementById('deleteClassModal')
+        deleteClassModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget
+            var recipient = button.getAttribute('data-bs-whatever')
+            var modalDeleteBtn = deleteClassModal.querySelector('#deleteClassSubmittBtn')
+
+            modalDeleteBtn.addEventListener('click', function (event2) {
+                fetch("{% url 'members-delete-class' pk=12345 %}".replace(/12345/, recipient.toString()), {
+                    method: 'get',
+                    headers: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    }
+                })
+                .then(_ => {
+                    console.log("200");
+
+                    document.getElementById('class-item-'+recipient).remove();
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('Klasse konnte leider nicht gelöscht werden!');
+                });
+            });
+        });
+    </script>
+
+</section>
+
+{% endblock %}

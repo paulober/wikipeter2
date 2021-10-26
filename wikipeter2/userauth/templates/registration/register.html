@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+
+{% block content %}
+
+<br/>
+<br/>
+<br/>
+
+
+<div class="shadow p-3 mb-5 bg-body rounded">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.as_p }}
+            <button class="btn btn-success">Benutzer registrieren</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

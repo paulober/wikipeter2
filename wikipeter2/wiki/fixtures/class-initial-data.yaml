@@ -1,0 +1,4 @@
+- model: wiki.Class
+  pk: 1
+  fields:
+    name: 10a

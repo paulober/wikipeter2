@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Neuen Post erstellen!{% endblock %}
+{% block content %}
+
+<h1>Neuen Post erstellen..</h1>
+<br/>
+<hr>
+<br/>
+
+<div class="container">
+
+<form method="POST">
+    {% csrf_token %}
+
+    {% if form.errors %}
+        <div class="alert alert-danger" role="alert">
+            <h5>Folgende Felder sind nicht korrekt ausgefüllt:</h5>
+            <ol>
+                {% for error in form.errors %}
+                    <li><strong>{{ error|escape }}</strong></li>
+                {% endfor %}
+            </ol>
+        </div>
+    {% endif %}
+
+    <div class="form-group">
+        {% comment "" %} {{ form.as_p }} {% endcomment %}
+        <div class="fieldWrapper">
+            <label class="form-label" 
+                    for="{{ form.title.id_for_label }}">Titel:</label>
+
+            {{ form.title }}
+        </div>
+
+        <div class="fieldWrapper mt-2">
+            <label class="form-label" 
+                    for="{{ form.category.id_for_label }}">Kategorie (entweder Hauptkategorie oder eine normale):</label>
+            {{ form.category }}
+        </div>
+        <div class="fieldWrapper mt-2">
+            <label class="form-label" 
+                    for="{{ form.master_category.id_for_label }}">Haupt-Kategorie (entweder Hauptkategorie oder eine normale):</label>
+            {{ form.master_category }}
+        </div>
+        <div class="fieldWrapper mt-2">
+            <label class="form-label" 
+                    for="{{ form.short_description.id_for_label }}">Kurzbeschreibung:</label>
+            {{ form.short_description }}
+        </div>
+        <div class="fieldWrapper mt-2">
+            <label class="form-label" 
+                    for="{{ form.content.id_for_label }}">Inhalt:</label>
+            {{ form.content }}
+        </div>
+    </div>
+    
+    <br/>
+    <button type="submit" class="btn btn-primary">Veröffendlichen</button>
+</form>
+
+</div>
+<br/>
+<br/>
+<br/>
+
+{% endblock %}
+

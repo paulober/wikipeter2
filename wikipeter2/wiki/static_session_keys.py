@@ -1,0 +1,6 @@
+UPLOAD_SUCCEED = 'upload_succeed'
+POST_ALLREADY_CONNECTED = 'post_allready_connected'
+POST_CONNECTION_SUCCEED = 'post_connection_succeed'
+CREATION_SUCCEED = 'creation_succeed'
+SAVE_SUCCEED = 'save_succeed'
+UPDATE_SUCCEED = 'update_succeed'

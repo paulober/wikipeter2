@@ -1,0 +1,43 @@
+{% extends 'members_base.html' %}
+
+{% block content %}
+
+<section class="members-section">
+
+<h1>Spezial-Seite bearbeiten..</h1>
+<hr>
+<br/>
+
+<form method="POST">
+    {% csrf_token %}
+
+    {% if form.errors %}
+        <div class="alert alert-danger" role="alert">
+            <h5>Folgende Felder sind nicht korrekt ausgefüllt:</h5>
+            <ol>
+                {% for error in form.errors %}
+                    <li><strong>{{ error|escape }}</strong></li>
+                {% endfor %}
+            </ol>
+        </div>
+    {% endif %}
+
+    <div class="form-group">
+        {{ form.as_p }}
+    </div>
+    
+    <br/>
+    <button class="btn btn-primary" type="submit">Speichern</button>
+    <a class="btn btn-secondary ms-2" href="{% url 'members-settings' %}">Zurück</a>
+    <br/>
+    <br/>
+    <br/>
+</form>
+
+<br/>
+<br/>
+<br/>
+
+</section>
+
+{% endblock %}

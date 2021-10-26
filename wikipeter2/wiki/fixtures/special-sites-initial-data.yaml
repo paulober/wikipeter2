@@ -1,0 +1,4 @@
+- model: wiki.SpecialSiteContent
+  fields:
+    site_name: home
+    content: "<h1>Willkommen</h1>"

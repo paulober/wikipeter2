@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block search_content %}{{ search_text }}{% endblock %}
+
+{% block content %}
+
+<h1>Deine Suchergebnisse:</h1>
+<br/>
+<hr>
+<br/>
+
+<div class="list-group">
+  {% for post in object_list %}
+    <a class="list-group-item list-group-item-action" href="{% url 'post-detail-from-search' pk=post.0 searchText=search_text %}" >{{ post.1 }}</a>
+  {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'members_base.html' %}
+
+{% block files_link_class %}active{% endblock %}
+
+{% block content %}
+
+<section class="members-section">
+    <h1 class="d-flex justify-content-between">Datei von Beiträgen lösen: <div><a class="btn btn-primary" href="{% url 'members-files' %}">Zurück</a></div></h1>
+    <hr>
+    <br/>
+
+    {% if object_list|length == 0 %}
+        <div class="alert alert-warning" role="alert">
+            Die Datei wurde noch nicht mit einem Beitrag verknüpft.
+        </div>
+    {% else %}
+        <div class="list-group overflow-auto">
+            {% for connection in object_list %}
+                
+                <li id="file-item-{{ connection.0 }}" class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 mt-1 me-auto">
+                        <div class="fw-bold" style="font-size: 1.3rem;">{{ connection.1 }}</div>
+                    </div>
+                    <button type="button" onclick="releaseClicked({{ connection.0 }})" class="btn btn-warning m-1">Lösen</button>
+                </li>
+            {% endfor %}
+        </div>
+        <br/>
+        <br/>
+
+    {% endif %}
+
+    <script>
+        function releaseClicked(id) {
+            console.log("Id: " + id);
+            fetch("{% url 'members-delete-wikipostfile' pk=12345 %}".replace(/12345/, id.toString()), {
+                method: 'get',
+                headers: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                }
+            })
+            .then(_ => {
+                let element = document.getElementById('file-item-'+id.toString());
+                element.remove();
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Datei konnte leider nicht gelöst werden!');
+            });
+        }
+    </script>
+
+</section>
+
+{% endblock %}

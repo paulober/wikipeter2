@@ -1,0 +1,69 @@
+{% extends 'members_base.html' %}
+
+{% block files_link_class %}active{% endblock %}
+
+{% block content %}
+
+<section>
+
+<h1>Ausgewählte Datei mit Beitrag verknüpfen..</h1>
+<hr>
+<br/>
+
+<div class="container">
+
+{% if server_error %}
+<div class="row">
+    <div class="alert alert-danger" role="alert">
+    Es gab leider ein Problem. Wenn der Fehler erneut auftrit, dann wenden Sie sich bitte an den Administrator.
+    </div>
+</div>
+{% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+
+    {% if form.errors %}
+        <div class="alert alert-danger" role="alert">
+            <h5>Folgende Felder sind nicht korrekt ausgefüllt:</h5>
+            <ol>
+                {% for error in form.errors %}
+                    <li><strong>{{ error|escape }}</strong></li>
+                {% endfor %}
+            </ol>
+        </div>
+    {% endif %}
+
+    <div class="form-group">
+        {% comment "" %} {{ form.as_p }} {% endcomment %}
+        <div class="fieldWrapper">
+            <label class="form-label" 
+                    for="{{ form.post.id_for_label }}">Beitrag (Post):</label>
+
+            {{ form.post }}
+            <div class="valid-feedback">
+                {% if not form.post.errors %}
+                Sieht gut aus!
+                {% endif %}
+            </div>
+            <div id="selectedPostValidationFeedback" class="invalid-feedback">
+                {{ form.post.errors.0|escape }}
+            </div>
+        </div>
+    </div>
+    
+    <br/>
+    <button type="submit" class="btn btn-primary">Mit Beitrag Verknüfpen</button><a class="btn btn-secondary ms-3" href="{% url 'members-files' %}">Zurück</a>
+    <br/>
+    <br/>
+    <br/>
+</form>
+
+</div>
+<br/>
+<br/>
+<br/>
+
+</section>
+
+{% endblock %}

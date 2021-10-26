@@ -1,0 +1,6 @@
+<!--{% comment %}{% if backref %}
+    <div class="row" style="padding-left: 0.7rem; border-width: 1px; padding-top: 1.5rem; padding-bottom: 1.5rem;">
+        {% comment %} {% view.kwargs.backref %} {% endcomment %}
+        <a href="{% url 'category-detail' post.category.id %}" type="button" class="btn-close" aria-label="Close"></a>
+    </div>
+    {% endif %}{% endcomment %}-->

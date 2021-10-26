@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% block post_block %}
+{% endblock %}
+
+{% if posts and posts|length > 1 %}
+    {% load static %}
+
+    <div class="container-fluid">
+        {% for post in posts  %}
+            <div class="card" style="width: 17rem; display: inline-block; margin: 1rem;">
+                <img src="{% static 'img/Post.svg' %}" class="card-img-top" alt="...">
+                <div class="card-header">
+                    <h1>{{ post.1 }}</h1>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{ post.2 }}</p>
+                    <a href="{% url 'post-detail' post.0 %}" class="btn btn-primary">Öffnen</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-warning" role="alert">
+        Hier befinden sich noch keine Posts, schau doch später nochmal hier vorbei.
+    </div>
+{% endif %}
+
+{% endblock %}

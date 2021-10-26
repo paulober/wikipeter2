@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-fluid">
+    {% if alert_tag is not None and search_text is None %}
+    <div class="row p-2">
+        {{ alert_tag |safe }}
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col{% if post.category is not None or downloads is not None or user.is_authenticated %}-9{%endif%}">
+            <div class="shadow p-2 mb-3 bg-body rounded">
+                <h1>{{ post.title }}</h1>
+
+                {% if from_master_category is None %}<small>By: {% if post.author.first_name is None or post.author.first_name|length == 0 %}{{post.author.username}}{% else %}{{ post.author.first_name }} {{ post.author.last_name }}{% endif %}</small><br/>{% endif %}
+            </div>
+            
+            <!--<hr style="height: 7px;">-->
+            <!-- <br/> -->
+            {% comment %} <!-- |safe -> This makes it possible to print include html --> {% endcomment %}
+            {% comment %} {{ post.content|safe }}  <- for html content {% endcomment %}
+            <div class="p-2 mb-3 bg-body rounded">
+                <span style="font-size: 1.15rem;"> {{ rendered_content|safe }} </span>
+            </div>
+
+            <br/><br/>
+
+            {% if search_text %}
+                <a href="{% url 'search' %}?search={{search_text}}" class="btn btn-secondary m-2">Zurück zur Suche</a>
+            {% elif post.master_category is not None %}
+                <a href="{% url 'home' %}" class="btn btn-secondary m-2">Zurück</a>
+            {% elif alert_tag is not None %}
+                <a href="{% url 'class-detail' post.category.target_class.id %}" class="btn btn-secondary m-2">Zurück zu {{post.category.target_class.name}}</a>
+            {% elif post.category %}
+                <a href="{% url 'category-detail' post.category.id %}" class="btn btn-secondary m-2">Zurück</a>
+            {% endif %}
+        </div>
+
+        {% if post.category is not None or downloads is not None or user.is_authenticated %}
+        <div class="col-3">
+            {% if from_master_category is None %}
+                <div class="card shadow border-light text-dark bg-light mb-3 bg-body rounded" style="width: 20rem; max-width: auto; min-height: 15rem;">
+                    <div class="card-header" style="background-color: greenyellow; height: 3.3rem; font-size: 1.5rem;"><h3>Infos</h3></div>
+                    <div class="card-body">
+                        <h5 class="d-flex justify-content-between">Autor: <span class="badge bg-secondary">{% if post.author.first_name is None or post.author.first_name|length == 0 %}{{post.author.username}}{% else %}{{ post.author.first_name }} {{ post.author.last_name }}{% endif %}</span></h5>
+                        <h5 class="d-flex justify-content-between">Erstellt am: <span class="badge bg-secondary">{{ post.post_date }}</span></h5>
+                        <h5 class="d-flex justify-content-between">Klasse: <span class="badge bg-secondary">{{ post.category.target_class }}</span></h5>
+                        <h5 class="d-flex justify-content-between">Kategorie: <span class="badge bg-secondary">{{ post.category.title }}</span></h5>
+                    </div>
+                </div>
+            {% endif %}
+            {% if downloads is not None %}
+                <div class="card shadow border-light text-dark bg-light mb-3 bg-body rounded" style="width: 20rem; max-width: auto; min-height: 15rem;">
+                    <div class="card-header" style="background-color: greenyellow; height: 3.3rem; font-size: 1.5rem;"><h3>Downloads</h3></div>
+                    {% comment "" %}if you remove max-height beleow, the card will be stretced vertically until all downloads are vissible{% endcomment %}
+                    <div class="card-body overflow-auto" style="max-height: 15rem;">
+                        {% load static %}
+                        {% for download in downloads %}
+                            <h5 class="d-flex justify-content-between"><span><u>{{ download.1 }}</u>:</span> <a download href="{% with 'uploads/'|add:download.1 as filepath_static %}{% static filepath_static %}{% endwith %}" class="btn btn-secondary badge bg-secondary">Download</a></h5>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            {% if user.is_authenticated %}
+                <div class="card shadow border-light text-dark bg-light mb-3 rounded" style="width: 20rem; max-width: auto; min-height: 10rem;">
+                    <div class="card-header" style="background-color: greenyellow; height: 3.3rem; font-size: 1.5rem;"><h3>Verwaltung</h3></div>
+                    <div class="card-body">
+                        <span class="d-flex justify-content-between">
+                            <a class="btn btn-primary m-2" href="{% url 'members-edit-post' post.pk %}">Bearbeiten</a>
+                            <a class="btn btn-danger m-2" href="{% url 'members-delete-post' post.pk %}">Löschen</a>
+                        </span>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

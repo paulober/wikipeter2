@@ -1,0 +1,11 @@
+.dashboard-card {
+    width: 20rem;
+    max-width: auto; 
+    min-height: 15rem;
+}
+
+.card-header {
+    background-color: greenyellow; 
+    height: 3.3rem; 
+    font-size: 1.5rem;
+}

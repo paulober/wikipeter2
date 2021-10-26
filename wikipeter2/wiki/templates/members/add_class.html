@@ -1,0 +1,55 @@
+{% extends 'members_base.html' %}
+
+{% block classes_link_class %}active{% endblock %}
+
+{% block content %}
+
+<section>
+
+<h1>Neue Klasse erstellen..</h1>
+<hr>
+<br/>
+
+<div class="container">
+
+<form method="POST">
+    {% csrf_token %}
+
+    {% if form.errors %}
+        <div class="alert alert-danger" role="alert">
+            <h5>Folgende Felder sind nicht korrekt ausgefüllt:</h5>
+            <ol>
+                {% for error in form.errors %}
+                    <li><strong>{{ error|escape }}</strong></li>
+                {% endfor %}
+            </ol>
+        </div>
+    {% endif %}
+
+    <div class="form-group">
+        {{ form.as_p }}
+
+        {% comment "" %}
+        <div class="fieldWrapper mt-2">
+            <label class="form-label" 
+                    for="{{ form.category.id_for_label }}">Kategorie (entweder Hauptkategorie oder eine normale):</label>
+            {{ form.category }}
+        </div>{% endcomment %}
+    </div>
+    
+    <br/>
+    <button type="submit" class="btn btn-primary">Erstellen</button>
+    <a class="btn btn-secondary ms-3" href="{% url 'members-classes' %}">Zurück</a>
+    <br/>
+    <br/>
+    <br/>
+</form>
+
+</div>
+<br/>
+<br/>
+<br/>
+
+</section>
+
+{% endblock %}

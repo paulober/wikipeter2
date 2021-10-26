@@ -1,0 +1,9 @@
+- model: wiki.MasterCategory
+  pk: 1
+  fields:
+    title: RG Of The Day
+
+- model: wiki.MasterCategory
+  pk: 2
+  fields:
+    title: Impressum

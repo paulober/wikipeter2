@@ -1,0 +1,100 @@
+{% extends 'members_base.html' %}
+
+{% block posts_link_class %}active{% endblock %}
+
+{% block content %}
+
+<section class="members-section">
+
+    {% if object_list and object_list|length > 0 %}
+    <div id="deletePostModal" class="modal fade" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="deletePostModalTitle" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="deletePostModalTitle" class="modal-title">Beitrag löschen</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {# TODO: show the option to convert all old posts to a new master-category #}
+                    <p>Möchten Sie den Beitrag wirklich löschen?</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="dismissBtn" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+                    <button id="deletePostSubmittBtn" type="button" class="btn btn-danger" data-bs-dismiss="modal">Ja, Beitrag löschen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <h1 class="d-flex justify-content-between">Alle Beiträge: <div><a class="btn btn-primary" href="{% url 'members-add-post' %}">Neuen Beitrag erstellen</a></div></h1>
+    <hr>
+    <br/>
+
+    <div class="list-group overflow-auto">
+
+    {% if not object_list or object_list|length == 0 %}
+        <div class="alert alert-warning" role="alert">
+            Hier befinden sich noch keine Posts, erstelle doch gleich einen neuen Beitrag.
+        </div>
+    {% else %}
+        {% if update_succeed or creation_succeed %}
+            <div class="alert alert-success" role="alert">
+                {% if update_succeed %}
+                    Beitrag erfolgreich aktualisiert!
+                {% elif creation_succeed %}
+                    Beitrag wurde erfolgreich erstellt!
+                {% endif %}
+            </div>
+            <br/>
+        {% endif %}
+
+        {% for post in object_list %}
+            {% comment "" %}<a class="list-group-item list-group-item-action" href="{% url 'members-edit-post' post.pk %}" >
+            <span class="fw-bold" style="font-size: 1.3rem;">{{ post.title }}</span>
+            </a>{% endcomment %}
+
+            <li id="post-item-{{ post.pk }}" class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 mt-1 me-auto">
+                    <span class="fw-bold" style="font-size: 1.3rem;">{{ post.title }}</span>
+                </div>
+                
+                <a class="btn btn-primary m-1" href="{% url 'post-detail' pk=post.pk %}">Öffnen</a>
+                <a class="btn btn-secondary m-1" href="{% url 'members-edit-post' pk=post.pk %}">Bearbeiten</a>
+                <button type="button" class="btn btn-danger m-1" data-bs-toggle="modal" data-bs-target="#deletePostModal" data-bs-whatever="{{ post.pk }}">Löschen</button>
+            </li>
+        {% endfor %}
+
+    {% endif %}
+    </div>
+    <br/>
+    <br/>
+
+    <script>
+        var deletePostModal = document.getElementById('deletePostModal')
+        deletePostModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget
+            var recipient = button.getAttribute('data-bs-whatever')
+            var modalDeleteBtn = deletePostModal.querySelector('#deletePostSubmittBtn')
+
+            modalDeleteBtn.addEventListener('click', function (event2) {
+                fetch("{% url 'members-delete-post' pk=12345 %}".replace(/12345/, recipient.toString()), {
+                    method: 'get',
+                    headers: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    }
+                })
+                .then(_ => {
+                    document.getElementById('post-item-'+recipient).remove();
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('Beitrag konnte leider nicht gelöscht werden!');
+                });
+            });
+        });
+    </script>
+
+</section>
+
+{% endblock %}

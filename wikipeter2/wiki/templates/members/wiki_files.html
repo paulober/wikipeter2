@@ -1,0 +1,104 @@
+{% extends 'members_base.html' %}
+
+{% block files_link_class %}active{% endblock %}
+
+{% block content %}
+
+<section class="members-section">
+
+    {% if object_list and object_list|length > 0 %}
+    <div id="deleteFileModal" class="modal fade" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="deleteFileModalTitle" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="deleteFileModalTitle" class="modal-title">Datei löschen</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Möchten Sie die Datei wirklich löschen?</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="dismissBtn" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+                    <button id="deleteFileSubmittBtn" type="button" class="btn btn-danger" data-bs-dismiss="modal">Ja, Datei Löschen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <h1 class="d-flex justify-content-between">Alle Dateien: <div><a class="btn btn-primary" href="{% url 'members-upload-file' %}">Neue Datei hochladen</a></div></h1>
+    <hr>
+    <br/>
+
+    {% if not object_list or object_list|length == 0 %}
+        <div class="alert alert-warning" role="alert">
+            Hier befinden sich noch keine Dateien, lade doch gleich eine neue hoch.
+        </div>
+    {% else %}
+
+        {% if upload_succeed %}
+            <div class="alert alert-success" role="alert">
+                Datei erfolgreich hoch geladen!
+            </div>
+            <br/>
+        {% elif post_allready_connected %}
+            <div class="alert alert-warning" role="alert">
+                Die Datei wurde bereits mit diesem Beitrag verknüpft!
+            </div>
+            <br/>
+        {% elif post_connection_succeed %}
+            <div class="alert alert-success" role="alert">
+                Die Datei wurde erfolgreich mit diesem Beitrag verknüpft!
+            </div>
+            <br/>
+        {% endif %}
+
+        <div class="list-group overflow-auto">
+            {% for file in object_list %}
+                
+                <li id="file-item-{{ file.pk }}" class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 mt-1 me-auto">
+                        <div class="fw-bold" style="font-size: 1.3rem;">{{ file.name }}</div>
+                    </div>
+                    <a class="btn btn-primary m-1" href="{% url 'members-connect-file' selected_file=file.pk %}">Zu Beitrag hinzufügen</a>
+                    <a class="btn btn-warning m-1" href="{% url 'members-disconnect-file' selected_file=file.pk %}">Von Beitrag entfernen</a>
+                    <button type="button" class="btn btn-danger m-1" data-bs-toggle="modal" data-bs-target="#deleteFileModal" data-bs-whatever="{{ file.pk }}">Löschen</button>
+                </li>
+            {% endfor %}
+        </div>
+        <br/>
+        <br/>
+
+    {% endif %}
+
+    <script>
+        var deleteFileModal = document.getElementById('deleteFileModal')
+        deleteFileModal.addEventListener('show.bs.modal', function (event) {
+            // Button that triggered the modal
+            var button = event.relatedTarget
+            // Extract info from data-bs-* attributes
+            var recipient = button.getAttribute('data-bs-whatever')
+            var modalDeleteBtn = deleteFileModal.querySelector('#deleteFileSubmittBtn')
+
+            modalDeleteBtn.addEventListener('click', function (event2) {
+                fetch("{% url 'members-delete-file' pk=12345 %}".replace(/12345/, recipient.toString()), {
+                    method: 'get',
+                    headers: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    }
+                })
+                .then(_ => {
+                    let element = document.getElementById('file-item-'+recipient);
+                    element.remove();
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('Datei konnte leider nicht gelöscht werden!');
+                });
+            });
+        });
+    </script>
+
+</section>
+
+{% endblock %}

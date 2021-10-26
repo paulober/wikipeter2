@@ -1,0 +1,76 @@
+{% extends 'members_base.html' %}
+
+{% block posts_link_class %}active{% endblock %}
+
+{% block content %}
+
+<section class="members-section">
+
+<h1>Neuen Post erstellen..</h1>
+<hr>
+<br/>
+
+<div class="container">
+
+<form method="POST">
+    {% csrf_token %}
+
+    <div class="form-group">
+        {% if form.non_field_errors  %}
+            <div class="alert alert-danger" role="alert">
+                <h5>Folgende Fehler sind Aufgetreten:</h5>
+                <ol>
+                    {% for error in form.non_field_errors %}
+                        <li><strong>{{ error|escape }}</strong></li>
+                    {% endfor %}
+                </ol>
+            </div>
+        {% endif %}
+
+        
+        {% comment "" %} {{ form.as_p }} {% endcomment %}
+        <div class="fieldWrapper">
+            <label class="form-label" 
+                    for="{{ form.title.id_for_label }}">Titel:</label>
+
+            {{ form.title }}
+        </div>
+
+        <div class="fieldWrapper mt-2">
+            <label class="form-label" 
+                    for="{{ form.category.id_for_label }}">Kategorie (entweder Hauptkategorie oder eine normale):</label>
+            {{ form.category }}
+        </div>
+        <div class="fieldWrapper mt-2">
+            <label class="form-label" 
+                    for="{{ form.master_category.id_for_label }}">Haupt-Kategorie (entweder Hauptkategorie oder eine normale):</label>
+            {{ form.master_category }}
+        </div>
+        <div class="fieldWrapper mt-2">
+            <label class="form-label" 
+                    for="{{ form.short_description.id_for_label }}">Kurzbeschreibung:</label>
+            {{ form.short_description }}
+        </div>
+        <div class="fieldWrapper mt-2">
+            {% comment %} (HTML5 erlaubt mit <a href="https://getbootstrap.com/docs/5.0" target="_blank">Bootstrap 5</a>) {% endcomment %}
+            <label class="form-label" 
+                    for="{{ form.content.id_for_label }}">Inhalt (mit Markdown):</label>
+            {{ form.content }}
+        </div>
+    </div>
+    
+    <br/>
+    <button type="submit" class="btn btn-primary">Veröffendlichen</button><a class="btn btn-secondary ms-3" href="{% url 'members-files' %}">Zurück</a>
+    <br/>
+    <br/>
+</form>
+
+</div>
+<br/>
+<br/>
+<br/>
+<br/>
+
+</section>
+
+{% endblock %}

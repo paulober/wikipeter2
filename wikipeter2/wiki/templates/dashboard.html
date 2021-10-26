@@ -1,0 +1,43 @@
+{% extends 'members_base.html' %}
+
+{% block dashboard_link_class %}active{% endblock %}
+
+{% block stylesheets %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/dashboard-card.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section>
+    <div class="row mt-4 ml-3">
+        {% comment "Remove center and style from below if you ad another info card" %}{% endcomment %}
+        <center>
+        <div class="col ml-1" style="max-width: 70rem">
+            <div class="card shadow p-3 mb-3 bg-body rounded text-dark bg-light dashbord-card">
+                <div class="card-header"><h3>Allgemein</h3></div>
+                <div class="card-body">
+                    <h5 class="d-flex justify-content-between">Posts: <span class="badge bg-secondary">{{ general_posts }}</span></h5>
+                    <h5 class="d-flex justify-content-between">Dateien: <span class="badge bg-secondary">{{ general_files }}</span></h5>
+                    <h5 class="d-flex justify-content-between">Klassen: <span class="badge bg-secondary">{{ general_classes }}</span></h5>
+                    <h5 class="d-flex justify-content-between">Kategorien: <span class="badge bg-secondary">{{ general_categories }}</span></h5>
+                    <h5 class="d-flex justify-content-between">Haupt-Kategorien: <span class="badge bg-secondary">{{ general_master_categories }}</span></h5>
+                </div>
+            </div>
+        </div><center>
+        {% comment "" %}
+        <div class="col ml-1">
+            <div class="card shadow p-3 mb-3 bg-body rounded text-dark bg-light dashbord-card">
+                <div class="card-header"><h3>Allgemein</h3></div>
+                <div class="card-body">
+                    <h5 class="d-flex justify-content-between">Posts: <span class="badge bg-secondary">{{ general_posts }}</span></h5>
+                    <h5 class="d-flex justify-content-between">Dateien: <span class="badge bg-secondary">{{ general_files }}</span></h5>
+                    <h5 class="d-flex justify-content-between">Klassen: <span class="badge bg-secondary">{{ general_classes }}</span></h5>
+                    <h5 class="d-flex justify-content-between">Kategorien: <span class="badge bg-secondary">{{ general_categories }}</span></h5>
+                </div>
+            </div>
+        </div>{% endcomment %}
+    </div>
+</section>
+
+{% endblock %}

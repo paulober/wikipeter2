@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Post Löschen...</h1>
+<br/><br/>
+<h3>Löschen des Post's: <strong style="color: red;">{{ post.title }}</strong></h3>
+<br/>
+<br/>
+
+
+<div class="form-group">
+    {% comment %} Maybe try to use DELET instead of post {% endcomment %}
+    <form method="POST">
+        {% csrf_token %}
+
+        <button class="btn btn-danger" type="submit">Post löschen</button>
+        <small>...kann nicht rückgängig gemacht werden!</small>
+    </form>
+</div>
+
+<br/>
+
+{% endblock %}
